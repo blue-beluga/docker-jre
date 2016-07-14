@@ -1,0 +1,45 @@
+# encoding: UTF-8
+
+FROM <%= ENV.fetch('FROM') %>
+MAINTAINER The Blue Beluga <admin@bluebeluga.io>
+
+LABEL name="jre"
+LABEL description="Alpine Linux with Oracle JRE"
+LABEL version="<%= ENV.fetch('JRE_VERSION') %>"
+LABEL git_revision="<%= ENV.fetch('GIT_REVISION') %>"
+
+ENV JRE_VERSION <%= ENV.fetch('JRE_VERSION') %>
+ENV JRE_UPDATE <%= ENV.fetch('JRE_UPDATE') %>
+ENV JRE_BUILD <%= ENV.fetch('JRE_BUILD') %>
+ENV JRE_PACKAGE <%= ENV.fetch('JRE_PACKAGE') %>
+ENV JRE_SHA256 <%= ENV.fetch('JRE_SHA256') %>
+ENV JRE_HOME <%= ENV.fetch('JRE_HOME') %>
+
+RUN apk add --no-cache --virtual=build-dependencies curl ca-certificates tar && \
+    mkdir -p /opt && \
+    curl -jkLH "Cookie: oraclelicense=accept-securebackup-cookie" -o java.tar.gz \
+               "http://download.oracle.com/otn-pub/java/jdk/${JRE_VERSION}u${JRE_UPDATE}-b${JRE_BUILD}/${JRE_PACKAGE}-${JRE_VERSION}u${JRE_UPDATE}-linux-x64.tar.gz" && \
+    echo "${JRE_SHA256}  java.tar.gz" | sha256sum -c - && \
+    gunzip -c java.tar.gz | tar -xf - -C /opt && \
+    rm -f java.tar.gz && \
+    ln -s "${JRE_HOME}1.${JRE_VERSION}.0_${JRE_UPDATE}" "${JRE_HOME}" && \
+    rm -rf "${JRE_HOME}/lib/plugin.jar" \
+           "${JRE_HOME}/lib/ext/jfxrt.jar" \
+           "${JRE_HOME}/bin/javaws" \
+           "${JRE_HOME}/lib/javaws.jar" \
+           "${JRE_HOME}/lib/desktop" \
+           "${JRE_HOME}/plugin" \
+           "${JRE_HOME}/lib/deploy*" \
+           "${JRE_HOME}/lib/*javafx*" \
+           "${JRE_HOME}/lib/*jfx*" \
+           "${JRE_HOME}/lib/amd64/libdecora_sse.so" \
+           "${JRE_HOME}/lib/amd64/libprism_*.so" \
+           "${JRE_HOME}/lib/amd64/libfxplugins.so" \
+           "${JRE_HOME}/lib/amd64/libglass.so" \
+           "${JRE_HOME}/lib/amd64/libgstreamer-lite.so" \
+           "${JRE_HOME}/lib/amd64/libjavafx*.so" \
+           "${JRE_HOME}/lib/amd64/libjfx*.so" && \
+    apk del build-dependencies && \
+    rm -rf /var/cache/apk/*
+
+ENV PATH "${JRE_HOME}/bin:${PATH}"
