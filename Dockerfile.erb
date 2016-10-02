@@ -9,12 +9,12 @@ LABEL io.bluebeluga.jre.version="<%= ENV.fetch('TAG') %>"
 LABEL io.bluebeluga.jre.git-revision="<%= ENV.fetch('GIT_REVISION') %>"
 LABEL io.bluebeluga.jre.release-date="<%= Time.now.strftime('%B %d, %Y %H:%M') %>"
 
-ENV JRE_VERSION <%= ENV.fetch('JRE_VERSION') %>
-ENV JRE_UPDATE <%= ENV.fetch('JRE_UPDATE') %>
-ENV JRE_BUILD <%= ENV.fetch('JRE_BUILD') %>
-ENV JRE_PACKAGE <%= ENV.fetch('JRE_PACKAGE') %>
-ENV JRE_SHA256 <%= ENV.fetch('JRE_SHA256') %>
-ENV JRE_HOME <%= ENV.fetch('JRE_HOME') %>
+ENV JRE_VERSION=<%= ENV.fetch('JRE_VERSION') %>
+ENV JRE_UPDATE=<%= ENV.fetch('JRE_UPDATE') %>
+ENV JRE_BUILD=<%= ENV.fetch('JRE_BUILD') %>
+ENV JRE_PACKAGE=<%= ENV.fetch('JRE_PACKAGE') %>
+ENV JRE_SHA256=<%= ENV.fetch('JRE_SHA256') %>
+ENV JRE_HOME=<%= ENV.fetch('JRE_HOME') %>
 
 RUN apk add --no-cache --virtual=build-dependencies curl ca-certificates tar && \
     mkdir -p /opt && \
