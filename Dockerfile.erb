@@ -3,10 +3,11 @@
 FROM <%= ENV.fetch('FROM') %>
 MAINTAINER The Blue Beluga <admin@bluebeluga.io>
 
-LABEL name="jre"
-LABEL description="Alpine Linux with Oracle JRE"
-LABEL version="<%= ENV.fetch('JRE_VERSION') %>"
-LABEL git_revision="<%= ENV.fetch('GIT_REVISION') %>"
+LABEL vendor="The Blue Beluga Company"
+LABEL io.bluebeluga.jre.description="Oracle JRE"
+LABEL io.bluebeluga.jre.version="<%= ENV.fetch('TAG') %>"
+LABEL io.bluebeluga.jre.git-revision="<%= ENV.fetch('GIT_REVISION') %>"
+LABEL io.bluebeluga.jre.release-date="<%= Time.now.strftime('%B %d, %Y %H:%M') %>"
 
 ENV JRE_VERSION <%= ENV.fetch('JRE_VERSION') %>
 ENV JRE_UPDATE <%= ENV.fetch('JRE_UPDATE') %>
